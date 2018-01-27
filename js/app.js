@@ -23,7 +23,7 @@ $(document).ready(function() {
      var elem = MathJax.Hub.getAllJax('pretty')[0];
      MathJax.Hub.Queue(['Text', elem, latex]);
    }
-   catch (err) {}
+   catch (err) { console.log(err); }
  };
 
 	// Hide input till latex loads
