@@ -206,6 +206,25 @@ $(document).ready(function() {
 	"frequency" : 261.63,
 	"volume" : 0.05
     }).toMaster();
+
+    var n =0;
+    var t =100;
+
+    osc.start();
+    setInterval(chgTone((n+=(t/1000), t);
+
+	
+    function onoff(){
+    if(osc.state() == "started")
+    	osc.stop();
+    else
+	osc.start();
+    }
+
+    function chgTone(double y){
+       osc.frequency.value = 261.63*Math.pow(2, y/12);
+
+    }
 	
     osc.start();
 	
