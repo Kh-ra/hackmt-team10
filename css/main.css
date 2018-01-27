@@ -1,5 +1,5 @@
 #main {
-	height: 100vh;
+	min-height: 100vh;
 	background-color: #8cffa0;
 }
 
@@ -62,6 +62,14 @@
 
 .func-history-delete, .func-history-copy {
 	cursor: pointer;
+}
+
+.func-history-range {
+	text-align: center;
+}
+
+.func-history-range-label {
+	margin: 0 .5rem;
 }
 
 /*History scroll*/

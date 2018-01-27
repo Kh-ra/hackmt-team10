@@ -1,5 +1,7 @@
 
 $(document).ready(function() {
+  var curr_id = 1;
+  var last_id = 1;
 	/*
 		Latex Formatting
 	*/
@@ -18,7 +20,7 @@ $(document).ready(function() {
      var latex = node ? node.toTex({parenthesis: 'keep', implicit: 'hide'}) : '';
 
      // display and re-render the expression
-     var elem = MathJax.Hub.getAllJax('pretty')[1];
+     var elem = MathJax.Hub.getAllJax('pretty')[0];
      MathJax.Hub.Queue(['Text', elem, latex]);
    }
    catch (err) {}
@@ -31,10 +33,12 @@ $(document).ready(function() {
 	}, 500);
 
 	// // Add function to history
-	function addToHistory(latex, text) {
-		$('<div class="func-history">'+latex+'<div class="func-history-ctrl">'+
+	function addToHistory(latex, text, start, end) {
+		$('<div class="func-history"><div class="func-history-latext">'+latex+'</div><div class="func-history-range">'+
+      '<span class="func-history-start">'+start+'</span><span class="func-history-range-label"><= x <=</span>'+
+      '<span class="func-history-end">'+end+'</span></div><div class="func-history-ctrl">'+
 			'<a href="#" class="func-history-delete"><i class="fa fa-trash" aria-hidden="true"></i></a>'+
-			'<a href="#" class="func-history-copy"><i class="fa fa-clipboard" aria-hidden="true"></i></a></div></div>')
+			'<a href="#" class="func-history-edit"><i class="fa fa-pencil" aria-hidden="true"></i></a></div></div>')
 			.data('text', text).appendTo('#history');
 		//My edit: Scroll to bottom
 		var element = document.getElementById("history");
@@ -44,7 +48,7 @@ $(document).ready(function() {
     //Click plot button
 	$('#submit_btn').click(function() {
 		if ($('function_input').val() != '') {
-			addToHistory($('#latex').html(), expr.value);
+			addToHistory($('#latex').html(), expr.value, $('#start_input').val(), $('#end_input').val());
 		}
 	});
 
@@ -57,10 +61,13 @@ $(document).ready(function() {
 		}
 	});
 
-	$('#history').on('click', '.func-history-copy', function(e) {
+	$('#history').on('click', '.func-history-edit', function(e) {
 		e.preventDefault();
 
 		$('#function_input').val($(this).parent().parent().data('text'));
+    $('#start_input').val($(this).parent().parent().find('.func-history-start').html());
+    $('#end_input').val($(this).parent().parent().find('.func-history-end').html());
+    $(this).parent().parent().remove();
 		expr.oninput();
 	});
 
@@ -160,7 +167,7 @@ $(document).ready(function() {
         width: 150,
         channels: 2,
       });
-    
+
     // Draw a curve
     var curve =
       view

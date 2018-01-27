@@ -35,22 +35,31 @@
 									<i class="fa fa-spinner fa-spin fa-fw fa-5x" aria-hidden></i>
 								</div>
 								<div class="hidden" id="main_input">
-									<div class="d-flex align-items-center mb-3 latex-display">
-										<span class="mr-1 d-flex align-items-center">$$\mathrm{f}\left( x\right)$$ =</span>
-										<span id="latex">$$0$$</span>
-									</div>
-									<div class="d-flex mb-3">
-										<span class="mr-1 d-flex align-items-center" id="function_label">$$\mathrm{f}\left( x\right)$$ =</span>
-										<div id="input_box" class="flex-1"><input type="text" id="function_input" class="form-control h-100" /></input></div>
-									</div>
+									<strong class="mb-2">Playback Info</strong>
 									<div class="d-flex">
 										<span class="mr-1">BPM:</span>
 										<input type="number" id="bpm_input" class="form-control w-50 mr-3"  value=120 min=1>
-										<input type="button" id="submit_btn" class="btn btn-primary flex-1" value="Plot">
+										<input type="button" id="toggle_audio" class="btn btn-primary flex-1" value="Play">
 									</div>
 									<hr>
+									<strong>Function Editor</strong>
+									<div id="func_editor">
+										<div class="d-flex align-items-center mb-3 latex-display">
+											<span class="mr-1 d-flex align-items-center">$$\mathrm{f}\left( x\right)$$ =</span>
+											<span id="latex">$$0$$</span>
+										</div>
+										<div class="d-flex mb-3">
+											<span class="mr-1 d-flex align-items-center" id="function_label">$$\mathrm{f}\left( x\right)$$ =</span>
+											<div id="input_box" class="flex-1"><input type="text" id="function_input" class="form-control h-100" /></input></div>
+										</div>
+										<div class="d-flex mb-3 align-items-center">
+											<input type="number" id="start_input" class="form-control w-25"/>
+											<span class="mx-2"><= t <=</span>
+											<input type="number" id="end_input" class="form-control w-25 mr-2"/>
+											<input type="button" value="Add" class="btn btn-success flex-1" id="submit_btn"/>
+										</div>
+									</div>
 									<div id="history">
-										<strong>History</strong>
 										
 									</div>
 								</div>
