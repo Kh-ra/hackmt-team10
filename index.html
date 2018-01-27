@@ -10,7 +10,7 @@
 
 <body>
 
-<div id="wrap">
+<div id="wrap" style=";height:100vh">
 	<div class="container-fluid">
 		<div class="row justify-content-center pt-3">
 			<div class="col-md-10">
@@ -22,15 +22,21 @@
 						<div class="row">
 							<div class="col-md-4">
 								<form action="">
-									<div style="height:75px;display:flex;align-items:center;background-color:#FFF59E;border-radius:4px;padding:5px;margin-bottom:10px">Function: </div>
+									<div class="d-flex align-items-center mb-3" style="height:75px;padding:10px;background-color:#FFF68D;border-radius:4px">
+										<span class="mr-1 d-flex align-items-center">$$\mathrm{f}\left( x\right)$$ =</span>
+										<span id="latex">$$0$$</span>
+									</div>
 									<div class="d-flex mb-3">
-										<span class="mr-1">f(x) =</span>
-										<input type="text" id="function_input" class="form-control" style="width:auto;flex:1"/>
+										<span class="mr-1 d-flex align-items-center" id="function_label">$$\mathrm{f}\left( x\right)$$ =</span>
+										<input type="text" id="function_input" class="form-control" style="width:auto;flex:1"/></input>
 									</div>
 									<div class="d-flex">
 										<span class="mr-1">BPM:</span>
 										<input type="number" id="bpm_input" class="form-control w-50 mr-3">
 										<input type="button" id="submit_btn" class="btn btn-primary" value="Plot" style="flex:1">
+									</div>
+									<div id="history">
+										
 									</div>
 								</form>
 							</div>
@@ -47,10 +53,31 @@
 
 <script src="js/lib/jquery.min.js"></script>
 <script src="js/lib/bootstrap.min.js"></script>
+<script src="http://cdnjs.cloudflare.com/ajax/libs/mathjs/3.20.1/math.min.js"></script>
+  <script src="http://cdnjs.cloudflare.com/ajax/libs/mathjax/2.3/MathJax.js?config=TeX-AMS-MML_HTMLorMML.js"></script>
 <script src="js/app.js"></script>
 
 <script>
-	
+	var expr = document.getElementById('function_input'),
+      pretty = document.getElementById('latex'),
+      result = document.getElementById('history');
+
+	expr.oninput = function () {
+	    var node = null;
+
+	    try {
+			// parse the expression
+			node = (expr.value == '') ? math.parse('0') : math.parse(expr.value);
+
+			// export the expression to LaTeX
+			var latex = node ? node.toTex({parenthesis: 'keep', implicit: 'hide'}) : '';
+
+			// display and re-render the expression
+			var elem = MathJax.Hub.getAllJax('pretty')[0];
+			MathJax.Hub.Queue(['Text', elem, latex]);
+		}
+		catch (err) {}
+	};
 </script>
 
 </body>
