@@ -4,25 +4,25 @@ $(document).ready(function() {
 		Latex Formatting
 	*/
 	var expr = document.getElementById('function_input'),
-	  pretty = document.getElementById('latex'),
-	  result = document.getElementById('history');
+      pretty = document.getElementById('latex'),
+      result = document.getElementById('history');
 
-	expr.oninput = function () {
-	    var node = null;
+ expr.oninput = function () {
+     var node = null;
 
-	    try {
-			// parse the expression
-			node = (expr.value == '') ? math.parse('0') : math.parse(expr.value);
+     try {
+     // parse the expression
+     node = (expr.value == '') ? math.parse('0') : math.parse(expr.value);
 
-			// export the expression to LaTeX
-			var latex = node ? node.toTex({parenthesis: 'keep', implicit: 'hide'}) : '';
+     // export the expression to LaTeX
+     var latex = node ? node.toTex({parenthesis: 'keep', implicit: 'hide'}) : '';
 
-			// display and re-render the expression
-			var elem = MathJax.Hub.getAllJax('pretty')[1];
-			MathJax.Hub.Queue(['Text', elem, latex]);
-		}
-		catch (err) {}
-	};
+     // display and re-render the expression
+     var elem = MathJax.Hub.getAllJax('pretty')[1];
+     MathJax.Hub.Queue(['Text', elem, latex]);
+   }
+   catch (err) {}
+ };
 
 	// Hide input till latex loads
 	setTimeout(function () {
@@ -30,7 +30,7 @@ $(document).ready(function() {
 		$('#main_input').show();
 	}, 500);
 
-	// Add function to history
+	// // Add function to history
 	function addToHistory(latex, text) {
 		$('<div class="func-history">'+latex+'<div class="func-history-ctrl">'+
 			'<a href="#" class="func-history-delete"><i class="fa fa-trash" aria-hidden="true"></i></a>'+
