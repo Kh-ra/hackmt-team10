@@ -202,6 +202,13 @@ $(document).ready(function() {
         zIndex: 1,
       });
           
+    var osc = new Tone.Oscillator({
+	"frequency" : 440,
+	"volume" : 0.05
+    }).toMaster();
+	
+    osc.start();
+	
   /*  // Animate
     var play = mathbox.play({
       target: 'cartesian',
