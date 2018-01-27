@@ -1,11 +1,16 @@
 #main {
 	height: 100vh;
+	background-color: #8cffa0;
+}
+
+.card-body {
+	background-color: #e2f1ed;
 }
 
 .latex-display {
 	height:75px;
 	padding:10px;
-	background-color:#FFF68D;
+	background-color: #9bff37;
 	border-radius:4px;
 }
 
@@ -57,6 +62,16 @@
 
 .func-history-delete, .func-history-copy {
 	cursor: pointer;
+}
+
+/*History scroll*/
+#history {
+	max-height: 250px;
+	overflow-y: auto;
+}
+
+#input_box {
+    height: 50px;
 }
 
 /*Override text-align center*/

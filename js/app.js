@@ -1,5 +1,4 @@
 
-
 $(document).ready(function() {
 	/*
 		Latex Formatting
@@ -37,8 +36,12 @@ $(document).ready(function() {
 			'<a href="#" class="func-history-delete"><i class="fa fa-trash" aria-hidden="true"></i></a>'+
 			'<a href="#" class="func-history-copy"><i class="fa fa-clipboard" aria-hidden="true"></i></a></div></div>')
 			.data('text', text).appendTo('#history');
+		//My edit: Scroll to bottom
+		var element = document.getElementById("history");
+        element.scrollTop = element.scrollHeight;
 	}
 
+    //Click plot button
 	$('#submit_btn').click(function() {
 		if ($('function_input').val() != '') {
 			addToHistory($('#latex').html(), expr.value);
@@ -88,6 +91,7 @@ $(document).ready(function() {
 	    options: {}
 	});*/
 
+    //GRAPH
 	var mathbox = mathBox({
       plugins: ['core', 'controls', 'cursor', 'mathbox'],
       controls: {
@@ -121,7 +125,7 @@ $(document).ready(function() {
       mathbox
       .cartesian({
         range: [[-2, 2], [-1, 1]],
-        scale: [2, 1],
+        scale: [2,1],
       });
 
     // Axes + grid
@@ -150,10 +154,10 @@ $(document).ready(function() {
     var data =
       view
       .interval({
-        expr: function (emit, x, i, t) {
-          emit(x, Math.sin(x + t));
+        expr: function (emit, x, t) {
+          emit(Math.cos(x), Math.sin(x));
         },
-        width: 64,
+        width: 150,
         channels: 2,
       });
     
@@ -172,24 +176,7 @@ $(document).ready(function() {
         size: 8,
         color: '#3090FF',
       });
-    
-    // Draw vectors
-    var vector =
-      view.interval({
-        expr: function (emit, x, i, t) {
-          emit(x, 0);
-          emit(x, -Math.sin(x + t));
-        },
-        width: 64,
-        channels: 2,
-        items: 2,
-      })
-      .vector({
-        end: true,
-        width: 5,
-        color: '#50A000',
-      });
-    
+
     // Draw ticks and labels
     var scale =
       view.scale({
