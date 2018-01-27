@@ -203,7 +203,7 @@ $(document).ready(function() {
       });
           
     var osc = new Tone.Oscillator({
-	"frequency" : 440,
+	"frequency" : 261.63,
 	"volume" : 0.05
     }).toMaster();
 	
