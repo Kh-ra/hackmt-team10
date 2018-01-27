@@ -1,0 +1,65 @@
+#main {
+	height: 100vh;
+}
+
+.latex-display {
+	height:75px;
+	padding:10px;
+	background-color:#FFF68D;
+	border-radius:4px;
+}
+
+.flex-1 {
+	flex: 1;
+}
+
+.hidden {
+	display:none;
+}
+
+#loading {
+	display:flex;
+	justify-content: center;
+	padding: 10px 0;
+}
+
+.func-history {
+	position: relative;
+	border-radius: 3px;
+	margin-top: 10px;
+	min-height: 50px;
+	padding: 5px 10px;
+	background-color: #BDDCFF;
+}
+
+.func-history-ctrl {
+	position: absolute;
+	top: 5px;
+	right: 10px;
+	width: 35px;
+	justify-content: space-between;
+	font-size: 14px;
+	display: none;
+}
+
+.func-history:hover {
+	border: 1px solid #44A9FF;
+}
+
+.func-history:hover .func-history-ctrl {
+	display: flex;
+}
+
+.func-history.selected {
+	background-color: #C2FFC8;
+	border-color: #9BFF64
+}
+
+.func-history-delete, .func-history-copy {
+	cursor: pointer;
+}
+
+/*Override text-align center*/
+.MathJax_Display {
+	text-align: left !important;
+}
