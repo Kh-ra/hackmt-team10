@@ -203,27 +203,29 @@ $(document).ready(function() {
       });
           
     var osc = new Tone.Oscillator({
-	"frequency" : 261.63,
-	"volume" : 0.05
-    }).toMaster();
+    	"frequency" : 261.63,
+    	"volume" : .05
+      }).toMaster();
 
     var n =0;
-    var t =100;
+    var t =50;
 
     osc.start();
-    setInterval(chgTone((n+=(t/1000), t);
+    setInterval(function () {
+        n+=(t/1000);
+        osc.frequency.value = 261.63*Math.pow(2, n/12);
+    }, t);
 
 	
-    function onoff(){
-    if(osc.state() == "started")
-    	osc.stop();
-    else
-	osc.start();
+    function onoff() {
+      if(osc.state() == "started")
+      	osc.stop();
+      else
+      	osc.start();
     }
 
-    function chgTone(double y){
+    function chgTone(y) {
        osc.frequency.value = 261.63*Math.pow(2, y/12);
-
     }
 	
     osc.start();
