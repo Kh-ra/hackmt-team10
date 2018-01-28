@@ -1,17 +1,21 @@
 $(document).ready(function() {
   var code = null;
+  var frequency = 261;
+  var n =0;
+  var t =50;
+  var interval;
   $('#function_input').val('');
-	/*
-		Latex Formatting
-	*/
-	var expr = document.getElementById('function_input'),
+  $('#frequency_input').val(frequency);
+  /*
+    Latex Formatting
+  */
+  var expr = document.getElementById('function_input'),
       pretty = document.getElementById('latex'),
       result = document.getElementById('history');
 
  expr.oninput = function () {
-     var node = null;
-
-     try {
+    var node = null;
+    try {
      // parse the expression
      node = (expr.value == '') ? math.parse('0') : math.parse(expr.value);
      code = math.compile(expr.value);
@@ -26,49 +30,49 @@ $(document).ready(function() {
  };
  expr.oninput();
 
-	// Hide input till latex loads
-	setTimeout(function () {
-		$('#loading').hide();
-		$('#main_input').show();
-	}, 500);
+  // Hide input till latex loads
+  setTimeout(function () {
+    $('#loading').hide();
+    $('#main_input').show();
+  }, 500);
 
-	// // Add function to history
-	function addToHistory(latex, text, start, end) {
-		$('<div class="func-history"><div class="func-history-latext">'+latex+'</div><div class="func-history-range">'+
+  // // Add function to history
+  function addToHistory(latex, text, start, end) {
+    $('<div class="func-history"><div class="func-history-latext">'+latex+'</div><div class="func-history-range">'+
       '<span class="func-history-start">'+start+'</span><span class="func-history-range-label"><= x <=</span>'+
       '<span class="func-history-end">'+end+'</span></div><div class="func-history-ctrl">'+
-			'<a href="#" class="func-history-delete"><i class="fa fa-trash" aria-hidden="true"></i></a>'+
-			'<a href="#" class="func-history-copy"><i class="fa fa-copy" aria-hidden="true"></i></a></div></div>')
-			.data('text', text).appendTo('#history');
-		//My edit: Scroll to bottom
-		var element = document.getElementById("history");
+      '<a href="#" class="func-history-delete"><i class="fa fa-trash" aria-hidden="true"></i></a>'+
+      '<a href="#" class="func-history-copy"><i class="fa fa-copy" aria-hidden="true"></i></a></div></div>')
+      .data('text', text).appendTo('#history');
+    //My edit: Scroll to bottom
+    var element = document.getElementById("history");
         element.scrollTop = element.scrollHeight;
-	}
+  }
 
     //Click plot button
-	$('#submit_btn').click(function() {
-		if ($('function_input').val() != '') {
-			addToHistory($('#latex').html(), expr.value, $('#start_input').val(), $('#end_input').val());
-		}
-	});
+  $('#submit_btn').click(function() {
+    if ($('function_input').val() != '') {
+      addToHistory($('#latex').html(), expr.value, $('#start_input').val(), $('#end_input').val());
+    }
+  });
 
-	$('#history').on('click', '.func-history-copy', function(e) {
-		e.preventDefault();
+  $('#history').on('click', '.func-history-copy', function(e) {
+    e.preventDefault();
 
-		$('#function_input').val($(this).parent().parent().data('text'));
+    $('#function_input').val($(this).parent().parent().data('text'));
     $('#start_input').val($(this).parent().parent().find('.func-history-start').html());
     $('#end_input').val($(this).parent().parent().find('.func-history-end').html());
-		expr.oninput();
-	});
+    expr.oninput();
+  });
 
-	$('#history').on('click', '.func-history-delete', function(e) {
-		e.preventDefault();
+  $('#history').on('click', '.func-history-delete', function(e) {
+    e.preventDefault();
 
-		$(this).parent().parent().remove();
-	});
+    $(this).parent().parent().remove();
+  });
 
     //GRAPH
-	var mathbox = mathBox({
+  var mathbox = mathBox({
       plugins: ['core', 'controls', 'cursor', 'mathbox'],
       controls: {
         // Orbit controls, i.e. Euler angles, with gimbal lock
@@ -98,7 +102,7 @@ $(document).ready(function() {
     var view =
       mathbox
       .cartesian({
-        range: [[-10, 10], [-5, 5]],
+        range: [[-2, 2], [-1, 1]],
         scale: [2,1],
       });
 
@@ -177,20 +181,17 @@ $(document).ready(function() {
       });
 
     var osc = new Tone.Oscillator({
-    	"frequency" : 261.63,
-    	"volume" : .05
+      "frequency" : 261.63,
+      "volume" : .05
       }).toMaster();
 
-    var n =0;
-    var t =50;
-    var interval;
     $('#play_btn').click(function() {
         $('#active_playback_ctrls').css('display', 'flex');
         $(this).css('display', 'none');
         osc.start();
         interval = setInterval(function () {
             n+=(t/1000);
-            osc.frequency.value = 261.63*Math.pow(2, code.eval({x : n})/12);
+            osc.frequency.value = frequency*Math.pow(2, code.eval({x : n})/12);
         }, t);
     });
 
@@ -207,6 +208,16 @@ $(document).ready(function() {
         $('#active_playback_ctrls').css('display', 'none');
         clearInterval(interval);
         osc.stop();
+    });
+
+    $('#frequency_input').on('change keyup', function () {
+       frequency = $(this).val();
+       try{
+          osc.frequency.value = frequency*Math.pow(2, code.eval({x : n})/12);
+       } catch{
+         n = 0;
+         osc.frequency.value = frequency;
+       }
     });
 
   	$('canvas').detach().appendTo('.chart-container');
