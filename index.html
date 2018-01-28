@@ -29,7 +29,7 @@
 						<h4>Mathemusician</h4>
 					</div>
 					<div class="card-body">
-						<div class="row">
+						<div class="row align-items-start">
 							<!-- Input Sidebar -->
 							<div class="col-md-4">
 								<div id="loading">
@@ -37,10 +37,19 @@
 								</div>
 								<div class="hidden" id="main_input">
 									<strong class="mb-2">Playback Info</strong>
-									<div class="d-flex">
-										<span class="mr-1">BPM:</span>
+									<div class="d-flex justify-content-between">
+										<span class="mr-1 align-self-center">BPM:</span>
 										<input type="number" id="bpm_input" class="form-control w-50 mr-3"  value=120 min=1>
-										<input type="button" id="toggle_audio" class="btn btn-primary flex-1" value="Play">
+										<button class="btn btn-primary flex-1" id="play_btn">
+											<i class="fa fa-play" aria-hidden="true"></i></button>
+										<div class="justify-content-between" id="active_playback_ctrls">
+											<button class="btn btn-danger audio-toggle-sm" id="stop_btn">
+												<i class="fa fa-square" aria-hidden="true"></i>
+											</button>
+											<button class="btn btn-primary audio-toggle-sm" id="pause_btn">
+												<i class="fa fa-pause" aria-hidden="true"></i>
+											</button>
+										</div>
 									</div>
 									<hr>
 									<strong>Function Editor</strong>
