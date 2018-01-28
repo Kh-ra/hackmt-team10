@@ -2,6 +2,7 @@
 $(document).ready(function() {
   var curr_id = 1;
   var last_id = 1;
+  var code = null;
 	/*
 		Latex Formatting
 	*/
@@ -15,7 +16,7 @@ $(document).ready(function() {
      try {
      // parse the expression
      node = (expr.value == '') ? math.parse('0') : math.parse(expr.value);
-     code = node.compile();
+     code = math.compile(expr.value);
      // export the expression to LaTeX
      var latex = node ? node.toTex({parenthesis: 'keep', implicit: 'hide'}) : '';
 
@@ -77,27 +78,6 @@ $(document).ready(function() {
 		$(this).parent().parent().remove();
 	});
 
-	// Charts.js
-	/*var ctx = document.getElementById("chart").getContext('2d');
-	var chart = new Chart(ctx, {
-	    // The type of chart we want to create
-	    type: 'line',
-
-	    // The data for our dataset
-	    data: {
-	        labels: ["January", "February", "March", "April", "May", "June", "July"],
-	        datasets: [{
-	            label: "My First dataset",
-	            backgroundColor: 'rgb(255, 99, 132)',
-	            borderColor: 'rgb(255, 99, 132)',
-	            data: [0, 10, 5, 2, 20, 30, 45],
-	        }]
-	    },
-
-	    // Configuration options go here
-	    options: {}
-	});*/
-
     //GRAPH
 	var mathbox = mathBox({
       plugins: ['core', 'controls', 'cursor', 'mathbox'],
@@ -146,9 +126,9 @@ $(document).ready(function() {
         width: 3,
       })
       .grid({
-        width: 2,  
+        width: 2,
         divideX: 20,
-        divideY: 10,        
+        divideY: 10,
       });
 
     // Make axes black
@@ -162,7 +142,7 @@ $(document).ready(function() {
       view
       .interval({
         expr: function (emit, x, t) {
-          emit(Math.cos(x), Math.sin(x));
+          emit(x, code.eval({x : x}));
         },
         width: 150,
         channels: 2,
@@ -189,14 +169,14 @@ $(document).ready(function() {
       view.scale({
         divide: 10,
       });
-    
+
     var ticks =
       view.ticks({
         width: 5,
         size: 15,
         color: 'black',
       });
-    
+
     var format =
       view.format({
         digits: 2,
@@ -208,7 +188,7 @@ $(document).ready(function() {
         color: 'red',
         zIndex: 1,
       });
-          
+
     var osc = new Tone.Oscillator({
     	"frequency" : 261.63,
     	"volume" : .05
@@ -220,10 +200,10 @@ $(document).ready(function() {
     osc.start();
     setInterval(function () {
         n+=(t/1000);
-        osc.frequency.value = 261.63*Math.pow(2, code.eval(n)/12);
+        osc.frequency.value = 261.63*Math.pow(2, code.eval({x : n})/12);
     }, t);
 
-	
+
     function onoff() {
       if(osc.state() == "started")
       	osc.stop();
@@ -234,9 +214,9 @@ $(document).ready(function() {
     function chgTone(y) {
        osc.frequency.value = 261.63*Math.pow(2, y/12);
     }
-	
+
     osc.start();
-	
+
   /*  // Animate
     var play = mathbox.play({
       target: 'cartesian',
@@ -250,7 +230,7 @@ $(document).ready(function() {
       ]
     });*/
 
-    
+
 	$('canvas').detach().appendTo('.chart-container');
 	$('.mathbox-overlays').detach().appendTo('.chart-container');
 
