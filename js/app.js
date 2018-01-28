@@ -1,8 +1,6 @@
-
 $(document).ready(function() {
-  var curr_id = 1;
-  var last_id = 1;
   var code = null;
+  $('#function_input').val('');
 	/*
 		Latex Formatting
 	*/
@@ -24,8 +22,9 @@ $(document).ready(function() {
      var elem = MathJax.Hub.getAllJax('pretty')[1];
      MathJax.Hub.Queue(['Text', elem, latex]);
    }
-   catch (err) { console.log(err); }
+   catch (err) {}
  };
+ expr.oninput();
 
 	// Hide input till latex loads
 	setTimeout(function () {
@@ -39,7 +38,7 @@ $(document).ready(function() {
       '<span class="func-history-start">'+start+'</span><span class="func-history-range-label"><= x <=</span>'+
       '<span class="func-history-end">'+end+'</span></div><div class="func-history-ctrl">'+
 			'<a href="#" class="func-history-delete"><i class="fa fa-trash" aria-hidden="true"></i></a>'+
-			'<a href="#" class="func-history-edit"><i class="fa fa-pencil" aria-hidden="true"></i></a></div></div>')
+			'<a href="#" class="func-history-copy"><i class="fa fa-copy" aria-hidden="true"></i></a></div></div>')
 			.data('text', text).appendTo('#history');
 		//My edit: Scroll to bottom
 		var element = document.getElementById("history");
@@ -53,22 +52,12 @@ $(document).ready(function() {
 		}
 	});
 
-	$('#history').on('click', '.func-history', function (e) {
-		e.preventDefault();
-
-		if (!$('e.target').hasClass('fa')) {
-			$('.func-history').removeClass('selected');
-			$(this).addClass('selected');
-		}
-	});
-
-	$('#history').on('click', '.func-history-edit', function(e) {
+	$('#history').on('click', '.func-history-copy', function(e) {
 		e.preventDefault();
 
 		$('#function_input').val($(this).parent().parent().data('text'));
     $('#start_input').val($(this).parent().parent().find('.func-history-start').html());
     $('#end_input').val($(this).parent().parent().find('.func-history-end').html());
-    $(this).parent().parent().remove();
 		expr.oninput();
 	});
 
@@ -98,13 +87,11 @@ $(document).ready(function() {
 
     // Do stuff with mathbox,
     // for example: (see docs/intro.md)
-
-
     // Place camera
     var camera =
       mathbox
       .camera({
-        proxy: true,
+        proxy: false,
         position: [0, 0, 2],
       });
     // 2D cartesian
@@ -196,42 +183,33 @@ $(document).ready(function() {
 
     var n =0;
     var t =50;
+    var interval;
+    $('#play_btn').click(function() {
+        $('#active_playback_ctrls').css('display', 'flex');
+        $(this).css('display', 'none');
+        osc.start();
+        interval = setInterval(function () {
+            n+=(t/1000);
+            osc.frequency.value = 261.63*Math.pow(2, code.eval({x : n})/12);
+        }, t);
+    });
 
-    osc.start();
-    setInterval(function () {
-        n+=(t/1000);
-        osc.frequency.value = 261.63*Math.pow(2, code.eval({x : n})/12);
-    }, t);
+    $('#stop_btn').click(function() {
+        $('#play_btn').css('display', 'block');
+        $('#active_playback_ctrls').css('display', 'none');
+        clearInterval(interval);
+        osc.stop();
+        n = 0;
+    });
 
+    $('#pause_btn').click(function() {
+        $('#play_btn').css('display', 'block');
+        $('#active_playback_ctrls').css('display', 'none');
+        clearInterval(interval);
+        osc.stop();
+    });
 
-    function onoff() {
-      if(osc.state() == "started")
-      	osc.stop();
-      else
-      	osc.start();
-    }
-
-    function chgTone(y) {
-       osc.frequency.value = 261.63*Math.pow(2, y/12);
-    }
-
-    osc.start();
-
-  /*  // Animate
-    var play = mathbox.play({
-      target: 'cartesian',
-      pace: 5,
-      to: 2,
-      loop: true,
-      script: [
-        {props: {range: [[-2, 2], [-1, 1]]}},
-        {props: {range: [[-4, 4], [-2, 2]]}},
-        {props: {range: [[-2, 2], [-1, 1]]}},
-      ]
-    });*/
-
-
-	$('canvas').detach().appendTo('.chart-container');
-	$('.mathbox-overlays').detach().appendTo('.chart-container');
+  	$('canvas').detach().appendTo('.chart-container');
+  	$('.mathbox-overlays').detach().appendTo('.chart-container');
 
 });

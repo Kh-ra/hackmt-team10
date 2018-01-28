@@ -1,3 +1,7 @@
+body {
+	cursor: auto !important;
+}
+
 #main {
 	min-height: 100vh;
 	background-color: #8cffa0;
@@ -55,11 +59,6 @@
 	display: flex;
 }
 
-.func-history.selected {
-	background-color: #C2FFC8;
-	border-color: #9BFF64
-}
-
 .func-history-delete, .func-history-copy {
 	cursor: pointer;
 }
@@ -91,4 +90,13 @@ canvas,
 .mathbox-overlays {
 	width: 100% !important;
 	height: 100% !important;
+}
+
+button.audio-toggle-sm {
+	width: 40px;
+}
+
+#active_playback_ctrls {
+	display: none;
+	width: 90px;
 }
