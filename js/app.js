@@ -180,7 +180,13 @@ $(document).ready(function() {
         zIndex: 1,
       });
 
-    var osc = new Tone.Oscillator({
+    var osc = new Tone.Synth({
+      "enevelope" : {
+        "attack" : 0.01,
+        "decay" : 0.2,
+        "sustain" : 0.2,
+        "release" : 0.2,
+      },
       "frequency" : 261.63,
       "volume" : .05
       }).toMaster();
@@ -188,10 +194,10 @@ $(document).ready(function() {
     $('#play_btn').click(function() {
         $('#active_playback_ctrls').css('display', 'flex');
         $(this).css('display', 'none');
-        osc.start();
         interval = setInterval(function () {
             n+=(t/1000);
-            osc.frequency.value = frequency*Math.pow(2, code.eval({x : n})/12);
+            osc.triggerAttack(frequency*Math.pow(2, code.eval({x : n})/12));
+            osc.triggerRelease();
         }, t);
     });
 
@@ -199,7 +205,6 @@ $(document).ready(function() {
         $('#play_btn').css('display', 'block');
         $('#active_playback_ctrls').css('display', 'none');
         clearInterval(interval);
-        osc.stop();
         n = 0;
     });
 
@@ -207,7 +212,6 @@ $(document).ready(function() {
         $('#play_btn').css('display', 'block');
         $('#active_playback_ctrls').css('display', 'none');
         clearInterval(interval);
-        osc.stop();
     });
 
     $('#frequency_input').on('change keyup', function () {
