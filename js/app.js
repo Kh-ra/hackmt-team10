@@ -15,12 +15,12 @@ $(document).ready(function() {
      try {
      // parse the expression
      node = (expr.value == '') ? math.parse('0') : math.parse(expr.value);
-
+     code = node.compile();
      // export the expression to LaTeX
      var latex = node ? node.toTex({parenthesis: 'keep', implicit: 'hide'}) : '';
 
      // display and re-render the expression
-     var elem = MathJax.Hub.getAllJax('pretty')[0];
+     var elem = MathJax.Hub.getAllJax('pretty')[1];
      MathJax.Hub.Queue(['Text', elem, latex]);
    }
    catch (err) { console.log(err); }
@@ -220,7 +220,7 @@ $(document).ready(function() {
     osc.start();
     setInterval(function () {
         n+=(t/1000);
-        osc.frequency.value = 261.63*Math.pow(2, n/12);
+        osc.frequency.value = 261.63*Math.pow(2, code.eval(n)/12);
     }, t);
 
 	
