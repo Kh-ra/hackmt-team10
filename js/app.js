@@ -111,7 +111,7 @@ $(document).ready(function() {
     var view =
       mathbox
       .cartesian({
-        range: [[-2, 2], [-1, 1]],
+        range: [[-10, 10], [-5, 5]],
         scale: [2,1],
       });
 
