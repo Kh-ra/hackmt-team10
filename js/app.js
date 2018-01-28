@@ -214,7 +214,7 @@ $(document).ready(function() {
        frequency = $(this).val();
        try{
           osc.frequency.value = frequency*Math.pow(2, code.eval({x : n})/12);
-       } catch{
+       } catch(e){
          n = 0;
          osc.frequency.value = frequency;
        }
