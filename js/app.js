@@ -3,9 +3,12 @@ $(document).ready(function() {
   var frequency = 261;
   var n =0;
   var t =50;
+  var limit = null;
   var interval;
   $('#function_input').val('');
   $('#frequency_input').val(frequency);
+  $('#start_input').val('');
+  $('#end_input').val('');
   /*
     Latex Formatting
   */
@@ -185,6 +188,18 @@ $(document).ready(function() {
       "volume" : .05
       }).toMaster();
 
+    function pauseAudio() {
+      $('#play_btn').css('display', 'block');
+      $('#active_playback_ctrls').css('display', 'none');
+      clearInterval(interval);
+      osc.stop();
+    }
+
+    function stopAudio() {
+      pauseAudio();
+      n = ($('#start_input').val() == '') ? 0 : Number($('#start_input').val());
+    }
+
     $('#play_btn').click(function() {
         $('#active_playback_ctrls').css('display', 'flex');
         $(this).css('display', 'none');
@@ -192,22 +207,16 @@ $(document).ready(function() {
         interval = setInterval(function () {
             n+=(t/1000);
             osc.frequency.value = frequency*Math.pow(2, code.eval({x : n})/12);
+            if (limit && (n >= limit)) stopAudio();
         }, t);
     });
 
     $('#stop_btn').click(function() {
-        $('#play_btn').css('display', 'block');
-        $('#active_playback_ctrls').css('display', 'none');
-        clearInterval(interval);
-        osc.stop();
-        n = 0;
+        stopAudio();
     });
 
     $('#pause_btn').click(function() {
-        $('#play_btn').css('display', 'block');
-        $('#active_playback_ctrls').css('display', 'none');
-        clearInterval(interval);
-        osc.stop();
+        pauseAudio();
     });
 
     $('#frequency_input').on('change keyup', function () {
@@ -218,6 +227,15 @@ $(document).ready(function() {
          n = 0;
          osc.frequency.value = frequency;
        }
+    });
+
+    $('#start_input').on('change keyup mouseup', function() {
+      var new_value = $(this).val();
+      if (n < new_value) n = Number(new_value);
+    });
+
+    $('#end_input').on('change keyup mouseup', function() {
+      limit = Number($(this).val());
     });
 
   	$('canvas').detach().appendTo('.chart-container');
